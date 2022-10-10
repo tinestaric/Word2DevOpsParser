@@ -90,8 +90,7 @@
                     var blip = imageFirst.BlipFill.Blip.Embed.Value;
                     ImagePart img = (ImagePart)document.MainDocumentPart.Document.MainDocumentPart.GetPartById(blip);
 
-                    StreamReader reader = new StreamReader(ConvertToBase64(img.GetStream()));
-                    string imgBase64 = reader.ReadToEnd();
+                    string imgBase64 = ConvertToBase64(img.GetStream());
 
                     currParagraph.Content += blip + Environment.NewLine;
                     currParagraph.Pictures.Add(blip, imgBase64);
@@ -102,7 +101,7 @@
             return pictureFound;
         }
 
-        private static Stream ConvertToBase64(this Stream stream)
+        private static string ConvertToBase64(this Stream stream)
         {
             byte[] bytes;
             using (var memoryStream = new MemoryStream())
@@ -111,8 +110,7 @@
                 bytes = memoryStream.ToArray();
             }
 
-            string base64 = Convert.ToBase64String(bytes);
-            return new MemoryStream(Encoding.UTF8.GetBytes(base64));
+            return Convert.ToBase64String(bytes);
         }
     }
 }
